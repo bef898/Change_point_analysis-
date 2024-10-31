@@ -7,9 +7,9 @@ def perform_eda(df):
     
     # Plotting price trends over time
     plt.figure(figsize=(12, 6))
-    plt.plot(df['Year'], df['Price'], label='Brent Oil Price')
+    plt.plot(df['Date'], df['Price'], label='Brent Oil Price')
     plt.title('Brent Oil Price Over Time')
-    plt.xlabel('Date')
+    plt.xlabel('Year')
     plt.ylabel('Price (USD)')
     plt.legend()
     plt.show()
@@ -30,4 +30,29 @@ def feature_engineering(df):
     df['Quarter'] = df['Date'].dt.quarter
     
     return df
+def plot_time_series(data):
+    """
+    Plot the time series to analyze trends, seasonality, and volatility.
+    """
+    plt.figure(figsize=(12, 6))
+    plt.plot(data, label='Brent Oil Prices')
+    plt.title("Brent Oil Prices Over Time")
+    plt.xlabel("Date")
+    plt.ylabel("Price (USD)")
+    plt.legend()
+    plt.show()
 
+def plot_rolling_statistics(data, window=30):
+    """
+    Plot rolling mean and standard deviation to observe volatility.
+    """
+    rolling_mean = data.rolling(window).mean()
+    rolling_std = data.rolling(window).std()
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(data, label='Original')
+    plt.plot(rolling_mean, label=f'{window}-day Rolling Mean', color='red')
+    plt.plot(rolling_std, label=f'{window}-day Rolling Std Dev', color='green')
+    plt.legend()
+    plt.title("Rolling Mean & Standard Deviation")
+    plt.show()
