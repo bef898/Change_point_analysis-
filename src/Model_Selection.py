@@ -1,25 +1,34 @@
-from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_absolute_error, mean_squared_error
+import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from statsmodels.tsa.arima.model import ARIMA
+from arch import arch_model
 
-def initialize_arima_model(df, order=(1, 1, 1)):
-    model = ARIMA(df['Price'], order=order)
-    return model
-def train_model(model):
-    
-    return model.fit()
-def evaluate_model(df, predictions):
+def train_arima(train_data, order):
     """
-    Evaluates the model using MAE and RMSE.
-    Args:
-        df (DataFrame): Original data with 'Price' column.
-        predictions (Series): Predicted prices.
-    Returns:
-        dict: Evaluation metrics (MAE, RMSE).
+    Train an ARIMA model using the training data.
+    :param train_data: Training portion of the time series data.
+    :param order: The (p, d, q) order parameters for ARIMA.
+    :return: Fitted ARIMA model
     """
-    mae = mean_absolute_error(df['Price'], predictions)
-    rmse = np.sqrt(mean_squared_error(df['Price'], predictions))
-    return {'MAE': mae, 'RMSE': rmse}
+    model = ARIMA(train_data, order=order)
+    arima_fit = model.fit()
+    print(f"ARIMA model trained with order {order}")
+    return arima_fit
+
+def train_garch(train_data, order):
+    """
+    Train a GARCH model on the training data.
+    :param train_data: Training portion of the time series data.
+    :param order: The (p, q) order parameters for GARCH.
+    :return: Fitted GARCH model
+    """
+    model = arch_model(train_data, vol='Garch', p=order[0], q=order[1])
+    garch_fit = model.fit(disp="off")
+    print(f"GARCH model trained with order {order}")
+    return garch_fit
 def generate_report(metrics, file_path='report.txt'):
     """
     Generates a report with model performance metrics.
