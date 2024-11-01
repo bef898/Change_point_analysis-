@@ -28,7 +28,7 @@ def forecast_garch(model, steps):
     forecasted_volatility = forecast.variance.iloc[-1]  # Get the last row (latest forecast)
 
     # Plot the forecasted volatility
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(16, 5))
     plt.plot(forecasted_volatility, label="GARCH Forecasted Volatility")
     plt.title("GARCH Model Forecasted Volatility")
     plt.xlabel("Steps Ahead")
