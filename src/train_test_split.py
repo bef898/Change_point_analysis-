@@ -1,4 +1,3 @@
-# train_test_split.py
 def train_test_split(data, test_size=0.2):
     """
     Split data into training and testing sets based on time series order.
