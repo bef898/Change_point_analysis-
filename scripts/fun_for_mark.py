@@ -84,14 +84,34 @@ class BrentOilPriceAnalysis:
     # 3. Markov-Switching AR Model
     def train_markov_switching(self, data, k_regimes=2):
         """
-        Function to train a Markov-Switching Autoregressive model.
+        Function to train a Markov-Switching model with a specified number of regimes.
         """
-        model = MarkovSwitching(data, k_regimes=2, order=0)
-        ms_model = model.fit()
-        self.model_results['MarkovSwitching'] = ms_model
-        print("Markov-Switching Model trained.")
-        return self.model_results['MarkovSwitching']
-    
+        # Ensure the input data is univariate
+        if isinstance(data, pd.DataFrame):
+            if data.shape[1] > 1:
+                raise ValueError("Input data must be univariate. Select a single column.")
+            data = data.squeeze()  # Convert to Pandas Series if DataFrame with one column
+        
+        # Drop missing values
+        data = data.dropna()
+        
+        # Check for empty data after dropping missing values
+        if data.empty:
+            raise ValueError("Input data is empty after dropping missing values.")
+        
+        # Fit the Markov-Switching model
+        try:
+            model = MarkovSwitching(data, k_regimes=k_regimes, order=0)
+            ms_model = model.fit()
+            self.model_results['MarkovSwitching'] = ms_model
+            print("Markov-Switching Model trained successfully.")
+            return self.model_results['MarkovSwitching']
+        except Exception as e:
+            print(f"An error occurred during model training: {e}")
+            print("Detailed traceback:")
+            import traceback
+            traceback.print_exc()
+            return None
     ### D. Evaluation Module ###
     def evaluate_model(self, model_name='ARIMA'):
         """
