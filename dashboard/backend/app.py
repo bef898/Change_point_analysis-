@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)  # Allows cross-origin requests from React frontend
 
 # Load example data (assume you have a CSV file for demonstration)
-data = pd.read_csv('data/featured_oil_price_data.csv') 
+data = pd.read_csv('data/featured_oil_price_data.csv')
 @app.route('/api/price-trends', methods=['GET'])
 def get_price_trends():
     start_date = request.args.get('start_date')
